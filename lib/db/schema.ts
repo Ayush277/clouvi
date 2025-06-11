@@ -1,8 +1,10 @@
-import {pgTable, text, uuid, integer, boolean, timestamp} from  "drizzle-orm/pg-core";
-import { is, Relations } from "drizzle-orm";
+import {pgTable, text, uuid, integer, boolean, timestamp} 
+from  "drizzle-orm/pg-core";
+import {relations } from "drizzle-orm";
 import path from "path";
 import { fileURLToPath } from "url";
-import { use } from "react";
+import { Children, use } from "react";
+
 
 export const files = pgTable("files", {
     id : uuid("id").defaultRandom().primaryKey(),
@@ -38,3 +40,25 @@ export const files = pgTable("files", {
 
 
 })
+
+//parent: eahc file and folder can have a parent, so we can make a self relation thing
+//Children: each file and folder can have many children, so we can make a self relation thing
+
+export const filesRelations = relations(files, ({one, many}) => ({
+
+    parent: one(files, {
+        fields: [files.parentId],
+        references: [files.id],
+    }), //it show that parent is a one to many relation, it is used to make a self relation thing
+
+
+    Children: many(files) 
+
+
+}))
+
+//type defination for the files table
+export const file = typeof files.$inferSelect;
+export const Newfile = typeof files.$inferInsert;
+
+
