@@ -2,6 +2,8 @@
 import { table } from 'console';
 import * as dotenv from 'dotenv';
 import { defineConfig } from 'drizzle-kit';
+import { config } from 'dotenv';
+// Load environment variables from .env.local file
 
 dotenv.config({path:".env.local"});      
 if(!process.env.DATABASE_URL) {
@@ -9,13 +11,12 @@ if(!process.env.DATABASE_URL) {
 }
 
 export default defineConfig({
-  schema: './src/db/schema.ts',
-  out: './drizzle',
-  dialect: 'postgresql',
+  schema: "./lib/db/schema.ts",
+  out: "./drizzle",
+  dialect: "postgresql",
   dbCredentials: {
     url: process.env.DATABASE_URL as string,
   },
-
   migrations: {
     table: "__drizzle_migrations",
     schema: "public",
